@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>연지 납치하기</title>
     <style>
         body {
@@ -17,36 +17,42 @@
             background-position: center;
             font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
             overflow: hidden;
+            touch-action: none; /* 모바일 브라우저의 기본 제스처 방해 방지 */
         }
 
         .container {
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 50px;
+            padding: 40px 20px;
             border-radius: 30px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.3);
             text-align: center;
             z-index: 10;
+            width: 80%;
+            max-width: 350px;
         }
 
         h1 {
             color: #2c3e50;
             margin-bottom: 40px;
-            font-size: 24px;
+            font-size: 22px;
+            word-break: keep-all;
         }
 
         .btn-group {
             display: flex;
             justify-content: center;
-            gap: 30px;
+            gap: 20px;
         }
 
         button {
-            padding: 15px 35px;
-            font-size: 20px;
+            padding: 15px 30px;
+            font-size: 18px;
             font-weight: bold;
             border: none;
             border-radius: 15px;
             cursor: pointer;
+            /* 모바일에서 버튼 클릭 시 생기는 파란색 박스 제거 */
+            -webkit-tap-highlight-color: transparent; 
         }
 
         #yesBtn {
@@ -55,17 +61,15 @@
             transition: transform 0.2s;
         }
 
-        #yesBtn:hover {
-            transform: scale(1.1); /* '예' 버튼은 살짝 커지게 */
-        }
-
         #noBtn {
             background-color: #747d8c;
             color: white;
-            position: fixed; /* 화면 어디든 도망갈 수 있게 고정 */
-            /* 핵심: 부드러운 움직임을 만드는 속성 */
-            transition: all 0.4s ease-out; 
+            position: fixed;
+            transition: all 0.3s ease-out; /* 0.3초 동안 스르륵 이동 */
             z-index: 999;
+            /* 초기 위치 */
+            top: 55%;
+            left: 55%;
         }
     </style>
 </head>
@@ -75,7 +79,9 @@
         <h1>민준이와 데이트를 하시겠습니까?</h1>
         <div class="btn-group">
             <button id="yesBtn" onclick="sayYes()">예</button>
-            <button id="noBtn" onmouseover="moveButton()" style="top: 55%; left: 52%;">아니오</button>
+            <button id="noBtn" 
+                    onmouseover="moveButton()" 
+                    ontouchstart="moveButton(event)">아니오</button>
         </div>
     </div>
 
@@ -84,17 +90,26 @@
             alert("데이트 하고싶을줄 알았어요 ㅋ");
         }
 
-        function moveButton() {
+        function moveButton(e) {
+            // 모바일에서 터치 이벤트가 발생했을 때 클릭 이벤트가 또 발생하는 것을 방지
+            if (e) e.preventDefault();
+
             const btn = document.getElementById('noBtn');
             
-            // 화면의 가로/세로 범위 계산 (버튼이 화면 밖으로 나가지 않게 여유값 100 제외)
-            const maxX = window.innerWidth - btn.offsetWidth - 50;
-            const maxY = window.innerHeight - btn.offsetHeight - 50;
+            // 화면 크기 확보
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
 
-            const randomX = Math.floor(Math.random() * maxX);
-            const randomY = Math.floor(Math.random() * maxY);
+            // 버튼이 화면 밖으로 너무 나가지 않도록 여유 공간 설정
+            const margin = 80;
+            const maxX = screenWidth - btn.offsetWidth - margin;
+            const maxY = screenHeight - btn.offsetHeight - margin;
 
-            // 새로운 좌표로 이동
+            // 랜덤 좌표 생성 (최소 여백 보장)
+            const randomX = Math.max(margin / 2, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(margin / 2, Math.floor(Math.random() * maxY));
+
+            // 좌표 적용
             btn.style.left = randomX + 'px';
             btn.style.top = randomY + 'px';
         }
