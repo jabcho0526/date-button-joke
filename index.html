@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>광안리 갈래?</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('stitch.jpg'); 
+            background-size: cover;
+            background-position: center;
+            font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            text-align: center;
+            z-index: 10;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 40px;
+            font-size: 24px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        button {
+            padding: 15px 35px;
+            font-size: 20px;
+            font-weight: bold;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+
+        #yesBtn {
+            background-color: #ff4757;
+            color: white;
+            transition: transform 0.2s;
+        }
+
+        #yesBtn:hover {
+            transform: scale(1.1); /* '예' 버튼은 살짝 커지게 */
+        }
+
+        #noBtn {
+            background-color: #747d8c;
+            color: white;
+            position: fixed; /* 화면 어디든 도망갈 수 있게 고정 */
+            /* 핵심: 부드러운 움직임을 만드는 속성 */
+            transition: all 0.4s ease-out; 
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>광안리 데이트를 하시겠습니까? 🌊</h1>
+        <div class="btn-group">
+            <button id="yesBtn" onclick="sayYes()">예</button>
+            <button id="noBtn" onmouseover="moveButton()" style="top: 55%; left: 52%;">아니오</button>
+        </div>
+    </div>
+
+    <script>
+        function sayYes() {
+            alert("정답입니다! ❤️\n이번 주말 광안리에서 봐요!");
+        }
+
+        function moveButton() {
+            const btn = document.getElementById('noBtn');
+            
+            // 화면의 가로/세로 범위 계산 (버튼이 화면 밖으로 나가지 않게 여유값 100 제외)
+            const maxX = window.innerWidth - btn.offsetWidth - 50;
+            const maxY = window.innerHeight - btn.offsetHeight - 50;
+
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+
+            // 새로운 좌표로 이동
+            btn.style.left = randomX + 'px';
+            btn.style.top = randomY + 'px';
+        }
+    </script>
+</body>
+</html>
